@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Note } from "./models/note";
+import NoteCard from "@/components/custom/Note";
+import { ModeToggle } from "./components/ui/mode-toggle";
 
 function App() {
   const [notes, setNotes] = useState<Note[]>([]);
@@ -7,7 +9,7 @@ function App() {
   useEffect(() => {
     const loadNotes = async () => {
       try {
-        const response = await fetch("/api/notes", {
+        const response = await fetch("/api/notes/", {
           method: "GET",
         });
 
@@ -25,9 +27,21 @@ function App() {
   }, []);
 
   return (
-    <div className="bg-black h-screen p-4 text-white">
-      {JSON.stringify(notes)}
-    </div>
+    <>
+      <header className="relative p-4">
+        <h1 className="text-2xl">Notes</h1>
+        <button className="absolute top-4 right-4">
+          <ModeToggle />
+        </button>
+      </header>
+      <main className="p-4">
+        <article className="flex flex-col md:flex-row flex-wrap gap-3">
+          {notes.map((note) => {
+            return <NoteCard key={note._id} note={note} />;
+          })}
+        </article>
+      </main>
+    </>
   );
 }
 
