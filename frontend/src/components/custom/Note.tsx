@@ -7,6 +7,13 @@ import {
   CardContent,
   CardFooter,
 } from "../ui/card";
+import { Button } from "../ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Trash2 } from "lucide-react";
 
 interface NoteProps {
@@ -19,15 +26,26 @@ const formatCreatedAt = (createdAt: string): string => {
 
 const Note = ({ note }: NoteProps) => {
   return (
-    <Card className="flex-grow md:max-w-[350px]">
+    <Card className="flex-grow md:max-w-[50%] min-w-[300px] overflow-hidden">
       <CardHeader className="relative">
         <CardTitle>{note.title}</CardTitle>
-        <button className="absolute top-4 right-4 cursor-pointer">
-          <Trash2 size={18} />
-        </button>
+        <div className="absolute top-2 right-2">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <Button variant={"ghost"} className="p-2.5">
+                  <Trash2 size={18} />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent className="mb-1">
+                <p>Delete note</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
       </CardHeader>
       <CardContent>{note?.text}</CardContent>
-      <CardFooter className="text-sm">
+      <CardFooter className="text-xs font-light spacin text-gray-500 border-t bg-black bg-opacity-5 dark:bg-white dark:bg-opacity-5 py-2">
         {formatCreatedAt(note.createdAt)}
       </CardFooter>
     </Card>
