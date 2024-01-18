@@ -46,7 +46,7 @@ const CreateNoteDialog = ({ children }) => {
   return (
     <Dialog>
       <DialogTrigger>{children}</DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-w-[90%] max-h-[90%] rounded-md">
         <DialogHeader>
           <DialogTitle className="text-start text-2xl">Add Note</DialogTitle>
         </DialogHeader>

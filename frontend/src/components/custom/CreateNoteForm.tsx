@@ -12,6 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -56,7 +57,7 @@ export function ProfileForm() {
             <FormItem>
               <FormLabel>Text</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Textarea className="max-h-[300px]" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
