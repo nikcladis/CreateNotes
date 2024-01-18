@@ -26,13 +26,13 @@ const formatCreatedAt = (createdAt: string): string => {
 
 const Note = ({ note }: NoteProps) => {
   return (
-    <Card className="flex-grow md:max-w-[50%] min-w-[300px] overflow-hidden">
+    <Card className="flex flex-col flex-grow overflow-hidden">
       <CardHeader className="relative">
         <CardTitle>{note.title}</CardTitle>
         <div className="absolute top-2 right-2">
           <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger>
+              <TooltipTrigger asChild>
                 <Button variant={"ghost"} className="p-2.5">
                   <Trash2 size={18} />
                 </Button>
@@ -45,7 +45,7 @@ const Note = ({ note }: NoteProps) => {
         </div>
       </CardHeader>
       <CardContent>{note?.text}</CardContent>
-      <CardFooter className="text-xs font-light spacin text-gray-500 border-t bg-black bg-opacity-5 dark:bg-white dark:bg-opacity-5 py-2">
+      <CardFooter className="mt-auto text-xs font-light text-gray-500 border-t bg-black bg-opacity-5 dark:bg-white dark:bg-opacity-5 py-2">
         {formatCreatedAt(note.createdAt)}
       </CardFooter>
     </Card>

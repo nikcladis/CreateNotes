@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-
+import { ReloadIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -13,6 +13,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import useCreateNote from "@/hooks/useCreateNote";
+import { useSetRecoilState } from "recoil";
+import { notesState } from "@/atoms/atoms";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -21,17 +24,24 @@ const formSchema = z.object({
   text: z.optional(z.string()),
 });
 
-export function ProfileForm() {
+const initialValues = {
+  title: "",
+  text: "",
+};
+
+export function CreateNoteForm() {
+  const { createNote, loading, error } = useCreateNote();
+  const setNoteToDisplay = useSetRecoilState(notesState);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: "",
-      text: "",
-    },
+    defaultValues: initialValues,
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
+    const newNote = await createNote(values);
+    if (newNote) setNoteToDisplay((notes) => [...notes, newNote]);
   }
 
   return (
@@ -44,7 +54,7 @@ export function ProfileForm() {
             <FormItem>
               <FormLabel>Title</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input placeholder="Title" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -57,16 +67,23 @@ export function ProfileForm() {
             <FormItem>
               <FormLabel>Text</FormLabel>
               <FormControl>
-                <Textarea className="max-h-[300px]" {...field} />
+                <Textarea
+                  placeholder="Text"
+                  className="max-h-[300px]"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit">
+          {!loading && "Submit"}
+          {loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
+        </Button>
       </form>
     </Form>
   );
 }
 
-export default ProfileForm;
+export default CreateNoteForm;

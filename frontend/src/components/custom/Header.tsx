@@ -8,9 +8,7 @@ const Header = () => {
         <StickyNote size={28} />
         <h1 className="text-xl">Notes</h1>
       </div>
-      <button>
-        <ModeToggle />
-      </button>
+      <ModeToggle />
     </header>
   );
 };

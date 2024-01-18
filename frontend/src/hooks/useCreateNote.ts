@@ -15,10 +15,11 @@ interface NoteInput {
 }
 
 const useCreateNote = (): UseCreateNoteResult => {
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   const createNote = async (note: NoteInput): Promise<Note | null> => {
+    setLoading(true);
     try {
       const response = await fetchData("/api/notes/", {
         method: "POST",
@@ -28,15 +29,12 @@ const useCreateNote = (): UseCreateNoteResult => {
         },
       });
 
-      setLoading(false);
-
       const createdNote: Note = await response.json();
+      setLoading(false);
       return createdNote;
     } catch (error) {
       setError((error as Error).message);
-
       setLoading(false);
-
       return null;
     }
   };

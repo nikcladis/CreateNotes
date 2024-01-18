@@ -13,13 +13,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import ProfileForm from "./CreateNoteForm";
+import CreateNoteForm from "./CreateNoteForm";
 
 const CreateNoteModal = () => {
   return (
     <CreateNoteDialog>
       <CreateNoteTooltip>
-        <Button variant="secondary" className="p-2">
+        <Button asChild variant="secondary" className="p-2 w-fit">
           <FilePlus2 size={20} />
         </Button>
       </CreateNoteTooltip>
@@ -33,7 +33,7 @@ const CreateNoteTooltip = ({ children }) => {
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger>{children}</TooltipTrigger>
+        <TooltipTrigger asChild>{children}</TooltipTrigger>
         <TooltipContent>
           <p>Add note</p>
         </TooltipContent>
@@ -50,7 +50,7 @@ const CreateNoteDialog = ({ children }) => {
         <DialogHeader>
           <DialogTitle className="text-start text-2xl">Add Note</DialogTitle>
         </DialogHeader>
-        <ProfileForm />
+        <CreateNoteForm />
       </DialogContent>
     </Dialog>
   );

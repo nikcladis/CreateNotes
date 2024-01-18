@@ -1,19 +1,21 @@
-import { FilePlus2 } from "lucide-react";
 import Note from "@/components/custom/Note";
-import { Button } from "@/components/ui/button";
 import useFetchNotes from "@/hooks/useFetchNotes";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import CreateNoteModal from "./CreateNoteModal";
+import { useRecoilState } from "recoil";
+import { notesState } from "@/atoms/atoms";
+import { useEffect } from "react";
 
 const Main = () => {
   const { notes, loading, error } = useFetchNotes();
+  const [notesList, setNoteList] = useRecoilState(notesState);
+
+  useEffect(() => {
+    if (notes) {
+      setNoteList(notes);
+    }
+  }, [notes, setNoteList]);
 
   if (loading) return <div>Loading...</div>;
 
@@ -34,8 +36,8 @@ const Main = () => {
       <div className="flex mb-4 mr-4 justify-end">
         <CreateNoteModal />
       </div>
-      <article className="flex flex-col md:flex-row flex-wrap gap-3">
-        {notes.map((note) => {
+      <article className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
+        {notesList.map((note) => {
           return <Note key={note._id} note={note} />;
         })}
       </article>
