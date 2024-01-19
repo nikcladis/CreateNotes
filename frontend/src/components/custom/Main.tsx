@@ -2,7 +2,8 @@ import Note from "@/components/custom/Note";
 import useFetchNotes from "@/hooks/useFetchNotes";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import CreateNoteModal from "./CreateNoteModal";
+import { Skeleton } from "@/components/ui/skeleton";
+import CreateNoteModal from "@/components/custom/CreateNoteModal";
 import { useRecoilState } from "recoil";
 import { notesState } from "@/atoms/atoms";
 import { useEffect } from "react";
@@ -17,7 +18,17 @@ const Main = () => {
     }
   }, [notes, setNoteList]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading)
+    return (
+      <main className="px-4 py-16">
+        <article className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
+          <Skeleton className="w-auto h-[180px]" />
+          <Skeleton className="w-auto h-[180px]" />
+          <Skeleton className="w-auto h-[180px]" />
+          <Skeleton className="w-auto h-[180px]" />
+        </article>
+      </main>
+    );
 
   if (error) {
     return (
