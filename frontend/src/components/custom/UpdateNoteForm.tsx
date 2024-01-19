@@ -14,10 +14,11 @@ import {
 import { DialogClose } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import useCreateNote from "@/hooks/useCreateNote";
+import useUpdateNote from "@/hooks/useUpdateNote";
 import { useSetRecoilState } from "recoil";
 import { notesState } from "@/atoms/atoms";
 import { useRef } from "react";
+import { Note } from "@/models/note";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -26,27 +27,27 @@ const formSchema = z.object({
   text: z.optional(z.string()),
 });
 
-const initialValues = {
-  title: "",
-  text: "",
-};
+interface UpdateNoteFormProps {
+  initialNote: Note;
+}
 
-export function CreateNoteForm() {
-  const { createNote, loading, error } = useCreateNote();
-  const setNoteToDisplay = useSetRecoilState(notesState);
+export function UpdateNoteForm({ initialNote }: UpdateNoteFormProps) {
+  const { updateNote, loading, error } = useUpdateNote();
+  const setUpdateNoteToDisplay = useSetRecoilState(notesState);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialValues,
+    defaultValues: initialNote,
   });
 
   const dialogCloseRef = useRef<HTMLButtonElement | null>(null);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    const newNote = await createNote(values);
-    if (newNote) {
-      setNoteToDisplay((notes) => [...notes, newNote]);
+    const updatedNote = await updateNote(initialNote._id, values);
+    if (updatedNote) {
+      setUpdateNoteToDisplay((notes) =>
+        notes.map((note) => (note._id === updatedNote._id ? updatedNote : note))
+      );
       if (dialogCloseRef.current) {
         dialogCloseRef.current.click();
       }
@@ -63,7 +64,7 @@ export function CreateNoteForm() {
             <FormItem>
               <FormLabel>Title</FormLabel>
               <FormControl>
-                <Input placeholder="Title" {...field} />
+                <Input {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -76,18 +77,14 @@ export function CreateNoteForm() {
             <FormItem>
               <FormLabel>Text</FormLabel>
               <FormControl>
-                <Textarea
-                  placeholder="Text"
-                  className="max-h-[300px]"
-                  {...field}
-                />
+                <Textarea className="max-h-[300px]" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">
-          {!loading && "Submit"}
+        <Button type="submit" disabled={!form.formState.isDirty}>
+          {!loading && "Save"}
           {loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
         </Button>
         <DialogClose ref={dialogCloseRef} />
@@ -96,4 +93,4 @@ export function CreateNoteForm() {
   );
 }
 
-export default CreateNoteForm;
+export default UpdateNoteForm;

@@ -13,6 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Separator } from "@/components/ui/separator";
 import CreateNoteForm from "./CreateNoteForm";
 
 const CreateNoteModal = () => {
@@ -49,6 +50,7 @@ const CreateNoteDialog = ({ children }) => {
       <DialogContent className="md:max-w-[700px] max-w-[90%] max-h-[90%] rounded-md">
         <DialogHeader>
           <DialogTitle className="text-start text-2xl">Add Note</DialogTitle>
+          <Separator />
         </DialogHeader>
         <CreateNoteForm />
       </DialogContent>
